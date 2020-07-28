@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "/root/.local/share/virtualenvs/serverless-victoria-JOYb8a5N/bin/python",
+    "python.linting.pycodestyleEnabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "yapf"
+}

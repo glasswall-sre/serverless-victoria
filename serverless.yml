@@ -1,0 +1,34 @@
+service: serverless-victoria
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: eu-west-1
+  stage: prod
+
+package:
+  exclude:
+    - package-lock.json
+    - package.json
+    - Pipfile
+    - Pipfile.lock
+    - requirements.txt
+    - requirements-dev.txt
+    - test.py
+    - node_modules/**
+    - .vscode/**
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+functions:
+  hello:
+    handler: handler.handler
+    events:
+      - http:
+          path: /
+          method: post

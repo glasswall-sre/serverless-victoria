@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+yapf = "*"
+pylint = "*"
+pipenv-to-requirements = "*"
+
+[packages]
+victoria = "*"
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+freeze = "pipenv_to_requirements -f"
