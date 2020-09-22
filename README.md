@@ -42,7 +42,8 @@ special characters (like `\n`).
 ### Quick start
 1. Clone the repo.
 2. Run `pipenv sync --dev`
-3. You're good to go.
+3. Run tests `python -m unittest`
+4. You're good to go.
 
 ### Deploying
 1. `pipenv run freeze`
