@@ -78,11 +78,11 @@ def handler(event, context):
                     'body': json.dumps(output)}
         else:
             return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                    'error': 'Command failed with non-zero status code',
+                    'error': 'Command failed: non-zero status code',
                     'message': output}
     except Exception as e:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'error': 'Command failed',
+                'error': 'Command failed: uncaught Victoria exception detected',
                 'message': str(e)}
 
     # For completeness: in case Victoria didn't exit with sys.exit(...) and didn't throw any exceptions
