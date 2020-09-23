@@ -1,4 +1,6 @@
 import json
+import logging
+import logging.handlers
 import os
 from contextlib import redirect_stdout
 from http import HTTPStatus
@@ -11,6 +13,25 @@ from victoria.script import victoria
 
 PROJECT_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 CONFIG_PATH = PROJECT_PATH / "victoria.yaml"
+LOGS_DIR = PROJECT_PATH / 'logs'
+LOG_FILE = LOGS_DIR / 'app.log'
+
+# whether or not exception info should be included in the logs
+EXC_INFO = True
+
+
+def setup_logger():
+    os.makedirs(LOGS_DIR, exist_ok=True)
+
+    logger = logging.getLogger('handler')
+    logger.setLevel(logging.DEBUG)
+
+    file_handle = logging.handlers.RotatingFileHandler(LOG_FILE)
+    file_handle.setLevel(logging.DEBUG)
+    file_handle.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+    logger.addHandler(file_handle)
+    return logger
 
 
 def run_victoria(args: List[str]):
@@ -59,9 +80,13 @@ def handler(event, context):
     Returns:
         A dict with status code and body or error details.
     """
+
+    app_logger = setup_logger()
+
     try:
         body = json.loads(event['body'])
     except (KeyError, ValueError) as e:
+        app_logger.exception("Invalid request.", exc_info=EXC_INFO)
         return {'statusCode': HTTPStatus.BAD_REQUEST,
                 'error': 'Invalid request',
                 'message': str(e)}
@@ -74,18 +99,22 @@ def handler(event, context):
         output = read_output_val(f)
 
         if e.code == 0:
+            app_logger.info("Victoria completed successfully.")
             return {'statusCode': HTTPStatus.OK,
                     'body': json.dumps(output)}
         else:
+            app_logger.error(msg='Command failed: non-zero status code %s.' % e.code)
             return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
                     'error': 'Command failed: non-zero status code',
                     'message': output}
     except Exception as e:
+        app_logger.exception("Uncaught Victoria exception detected.", exc_info=EXC_INFO)
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
                 'error': 'Command failed: uncaught Victoria exception detected',
                 'message': str(e)}
 
     # For completeness: in case Victoria didn't exit with sys.exit(...) and didn't throw any exceptions
+    app_logger.error("Victoria didn't exit with sys.exit(...) and didn't throw any exceptions.")
     return {'statusCode': HTTPStatus.BAD_REQUEST,
             'error': 'Invalid request',
             'message': ''}
