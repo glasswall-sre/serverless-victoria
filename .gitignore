@@ -16,6 +16,7 @@ var/
 .installed.cfg
 *.egg
 .pytest_cache
+logs
 
 # Serverless directories
 .serverless
