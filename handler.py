@@ -13,24 +13,17 @@ from victoria.script import victoria
 
 PROJECT_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 CONFIG_PATH = PROJECT_PATH / "victoria.yaml"
-LOGS_DIR = PROJECT_PATH / 'logs'
-LOG_FILE = LOGS_DIR / 'app.log'
 
 # whether or not exception info should be included in the logs
 EXC_INFO = True
 
 
 def setup_logger():
-    os.makedirs(LOGS_DIR, exist_ok=True)
-
+    # initialize log settings using the base class
+    # see: https://docs.aws.amazon.com/lambda/latest/dg/python-logging.html
+    logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger('handler')
-    logger.setLevel(logging.DEBUG)
 
-    file_handle = logging.handlers.RotatingFileHandler(LOG_FILE)
-    file_handle.setLevel(logging.DEBUG)
-    file_handle.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-
-    logger.addHandler(file_handle)
     return logger
 
 
