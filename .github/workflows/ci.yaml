@@ -23,7 +23,7 @@ jobs:
           python -m unittest discover -s ./tests
       - name: Integration tests
         run:
-          pytest -v tests/test_lambda.py
+          pytest -v tests/test_awslambda.py
       - name: Formatting check
         uses: actions/checkout@v2
       - name: Run YAPF to test if python code is correctly formatted
