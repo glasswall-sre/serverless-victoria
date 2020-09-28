@@ -29,4 +29,4 @@ virtualenv==20.0.21
 wrapt==1.12.1
 yapf==0.30.0
 pytest==6.1.0
-boto3==1.0.0
+boto3==1.15.5
