@@ -23,9 +23,8 @@ def account_id():
 
 @pytest.fixture()
 def fn_name(region_name, lambda_name, account_id):
-    return "arn:aws:lambda:{region}:{account_id}:function:{name}".format(region=region_name,
-                                                                         account_id=account_id,
-                                                                         name=lambda_name)
+    return "arn:aws:lambda:{region}:{account_id}:function:{name}".format(
+        region=region_name, account_id=account_id, name=lambda_name)
 
 
 @pytest.fixture()
@@ -35,7 +34,8 @@ def lambda_client(region_name):
 
 @pytest.fixture
 def payload(request):
-    return json.dumps({'body': json.dumps({'args': request.param})}) if request.param else ""
+    return json.dumps({'body': json.dumps({'args': request.param})
+                       }) if request.param else ""
 
 
 @pytest.fixture()
@@ -56,7 +56,8 @@ def lambda_client_json_response(payload, lambda_client, fn_name):
 def test_correct_arguments_for_victoria(lambda_client_json_response, payload):
 
     # verify the response
-    assert type(lambda_client_json_response) == dict, "Incorrect response received."
+    assert type(
+        lambda_client_json_response) == dict, "Incorrect response received."
 
     assert 'statusCode' in lambda_client_json_response, "Response should contain `statusCode` field."
     assert 'body' in lambda_client_json_response, "Response should contain `body` field."
@@ -65,31 +66,40 @@ def test_correct_arguments_for_victoria(lambda_client_json_response, payload):
     assert lambda_client_json_response['body'].endswith('victoria.yaml"')
 
 
-@pytest.mark.parametrize('payload', [['store', 'unknownstore', 'ls', 'ls']], indirect=True)
+@pytest.mark.parametrize('payload', [['store', 'unknownstore', 'ls', 'ls']],
+                         indirect=True)
 def test_uncaught_victoria_exceptions(lambda_client_json_response, payload):
-    assert type(lambda_client_json_response) == dict, "Incorrect response received."
+    assert type(
+        lambda_client_json_response) == dict, "Incorrect response received."
 
     assert 'statusCode' in lambda_client_json_response, "Response should contain `statusCode` field."
     assert 'error' in lambda_client_json_response, "Response should contain `error` field."
 
-    assert lambda_client_json_response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert lambda_client_json_response['error'] == "Command failed: uncaught Victoria exception detected"
+    assert lambda_client_json_response[
+        'statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert lambda_client_json_response[
+        'error'] == "Command failed: uncaught Victoria exception detected"
 
 
-@pytest.mark.parametrize('payload', [['store', 'wrong', 'command']], indirect=True)
+@pytest.mark.parametrize('payload', [['store', 'wrong', 'command']],
+                         indirect=True)
 def test_handled_victoria_errors(lambda_client_json_response, payload):
-    assert type(lambda_client_json_response) == dict, "Incorrect response received."
+    assert type(
+        lambda_client_json_response) == dict, "Incorrect response received."
 
     assert 'statusCode' in lambda_client_json_response, "Response should contain `statusCode` field."
     assert 'error' in lambda_client_json_response, "Response should contain `error` field."
 
-    assert lambda_client_json_response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert lambda_client_json_response['error'] == 'Command failed: non-zero status code'
+    assert lambda_client_json_response[
+        'statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert lambda_client_json_response[
+        'error'] == 'Command failed: non-zero status code'
 
 
 @pytest.mark.parametrize('payload', [None], indirect=True)
 def test_broken_request(lambda_client_json_response, payload):
-    assert type(lambda_client_json_response) == dict, "Incorrect response received."
+    assert type(
+        lambda_client_json_response) == dict, "Incorrect response received."
 
     assert 'statusCode' in lambda_client_json_response, "Response should contain `statusCode` field."
     assert 'error' in lambda_client_json_response, "Response should contain `error` field."
