@@ -47,7 +47,8 @@ def lambda_client_json_response(payload, lambda_client, fn_name):
 
         resp_data = r['Payload'].read()
         return json.loads(resp_data)
-    except Exception:
+    except Exception as e:
+        print(e)
         return False
 
 
