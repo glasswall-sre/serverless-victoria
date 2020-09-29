@@ -7,6 +7,8 @@ verify_ssl = true
 yapf = "*"
 pylint = "*"
 pipenv-to-requirements = "*"
+pytest = "*"
+boto3 = "*"
 
 [packages]
 victoria = "*"

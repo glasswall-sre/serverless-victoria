@@ -80,9 +80,11 @@ def handler(event, context):
         body = json.loads(event['body'])
     except (KeyError, ValueError) as e:
         app_logger.exception("Invalid request.", exc_info=EXC_INFO)
-        return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'error': 'Invalid request',
-                'message': str(e)}
+        return {
+            'statusCode': HTTPStatus.BAD_REQUEST,
+            'error': 'Invalid request',
+            'message': str(e)
+        }
 
     f = StringIO()
     try:
@@ -93,21 +95,30 @@ def handler(event, context):
 
         if e.code == 0:
             app_logger.info("Victoria completed successfully.")
-            return {'statusCode': HTTPStatus.OK,
-                    'body': json.dumps(output)}
+            return {'statusCode': HTTPStatus.OK, 'body': json.dumps(output)}
         else:
-            app_logger.error(msg='Command failed: non-zero status code %s.' % e.code)
-            return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                    'error': 'Command failed: non-zero status code',
-                    'message': output}
+            app_logger.error(msg='Command failed: non-zero status code %s.' %
+                             e.code)
+            return {
+                'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
+                'error': 'Command failed: non-zero status code',
+                'message': output
+            }
     except Exception as e:
-        app_logger.exception("Uncaught Victoria exception detected.", exc_info=EXC_INFO)
-        return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'error': 'Command failed: uncaught Victoria exception detected',
-                'message': str(e)}
+        app_logger.exception("Uncaught Victoria exception detected.",
+                             exc_info=EXC_INFO)
+        return {
+            'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
+            'error': 'Command failed: uncaught Victoria exception detected',
+            'message': str(e)
+        }
 
     # For completeness: in case Victoria didn't exit with sys.exit(...) and didn't throw any exceptions
-    app_logger.error("Victoria didn't exit with sys.exit(...) and didn't throw any exceptions.")
-    return {'statusCode': HTTPStatus.BAD_REQUEST,
-            'error': 'Invalid request',
-            'message': ''}
+    app_logger.error(
+        "Victoria didn't exit with sys.exit(...) and didn't throw any exceptions."
+    )
+    return {
+        'statusCode': HTTPStatus.BAD_REQUEST,
+        'error': 'Invalid request',
+        'message': ''
+    }
