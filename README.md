@@ -42,7 +42,7 @@ special characters (like `\n`).
 ### Quick start
 1. Clone the repo.
 2. Run `pipenv sync --dev`
-3. Run tests `python -m unittest`, `pytest -v tests/test_lambda.py`
+3. Run tests `python -m unittest`, `pytest -v tests/test_awslambda.py`
 4. You're good to go.
 
 ### Deploying
