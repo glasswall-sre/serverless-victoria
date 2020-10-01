@@ -47,4 +47,5 @@ special characters (like `\n`).
 
 ### Deploying
 1. `pipenv run freeze`
-2. `serverless deploy`
+2. `sls plugin install -n serverless-python-requirements`
+3. `serverless deploy`
