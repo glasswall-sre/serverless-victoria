@@ -12,6 +12,8 @@ boto3 = "*"
 
 [packages]
 victoria = ">=0.7.8"
+azure-common = "*"
+adal = "*"
 
 [requires]
 python_version = "3.8"
