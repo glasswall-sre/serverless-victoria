@@ -11,7 +11,7 @@ pytest = "*"
 boto3 = "*"
 
 [packages]
-victoria = "*"
+victoria = ">=0.7.8"
 
 [requires]
 python_version = "3.8"
