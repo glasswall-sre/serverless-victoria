@@ -1,0 +1,36 @@
+name: cd
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 12.x ]
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.VICTORIA_SERVERLESS_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.VICTORIA_SERVERLESS_AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - name: serverless
+        uses: jackdcasey/github-action@python3.8-nodejs13
+        with:
+          args: deploy
+        env:
+          # SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          #
+          # or if using AWS credentials directly
+          AWS_ACCESS_KEY_ID: ${{ secrets.VICTORIA_SERVERLESS_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.VICTORIA_SERVERLESS_AWS_SECRET_ACCESS_KEY }}
