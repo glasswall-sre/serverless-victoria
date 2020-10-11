@@ -5,7 +5,8 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - master
 
 jobs:
   build:
@@ -19,7 +20,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.VICTORIA_SERVERLESS_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.VICTORIA_SERVERLESS_AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
+          aws-region: eu-west-2
       - uses: actions/checkout@v2
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
