@@ -8,12 +8,12 @@ import pytest
 # fixtures for tests
 @pytest.fixture()
 def region_name():
-    return 'eu-west-1'
+    return 'eu-west-2'
 
 
 @pytest.fixture()
 def lambda_name():
-    return 'serverless-victoria-prod-hello'
+    return 'serverless-victoria-service-prod-hello'
 
 
 @pytest.fixture()
