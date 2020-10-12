@@ -14,9 +14,6 @@ from victoria.script import victoria
 PROJECT_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 CONFIG_PATH = PROJECT_PATH / "victoria.yaml"
 
-# whether or not exception info should be included in the logs
-EXC_INFO = True
-
 
 def setup_logger():
     # initialize log settings using the base class
@@ -79,7 +76,7 @@ def handler(event, context):
     try:
         body = json.loads(event['body'])
     except (KeyError, ValueError) as e:
-        app_logger.exception("Invalid request.", exc_info=EXC_INFO)
+        app_logger.error(msg="Invalid request.")
         return {
             'statusCode': HTTPStatus.BAD_REQUEST,
             'error': 'Invalid request',
@@ -105,8 +102,7 @@ def handler(event, context):
                 'message': output
             }
     except Exception as e:
-        app_logger.exception("Uncaught Victoria exception detected.",
-                             exc_info=EXC_INFO)
+        app_logger.error(msg="Uncaught Victoria exception detected.")
         return {
             'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
             'error': 'Command failed: uncaught Victoria exception detected',
