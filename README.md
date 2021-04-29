@@ -49,3 +49,14 @@ special characters (like `\n`).
 1. `pipenv run freeze`
 2. `sls plugin install -n serverless-python-requirements`
 3. `serverless deploy`
+
+## Architecture Diagram
+
+### Slack Authentication with Victoria
+
+![Authentication](img/victoria_auth.png)
+
+### Serverless Workflow Architecture
+
+![Architecture](img/victoria_arch.png)
+
